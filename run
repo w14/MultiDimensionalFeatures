@@ -1,0 +1,9 @@
+
+git clone https://github.com/w14/MultiDimensionalFeatures.git
+cd MultiDimensionalFeatures
+python -m venv multid
+pip install -r requirements.txt 
+cd intervention
+# remember to set
+export HF_TOKEN=
+python3 circle_probe_interventions.py day a llama --device 0 --intervention_pca_k 5 --probe_on_cos --probe_on_sin
