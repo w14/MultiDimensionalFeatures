@@ -1,7 +1,7 @@
 import os
 import dill as pickle
 
-BASE_DIR = "/data/scratch/jae/"
+BASE_DIR = "/workspace/data/scratch/jae/"
 
 os.environ["TRANSFORMERS_CACHE"] = f"{BASE_DIR}/.cache/"
 
