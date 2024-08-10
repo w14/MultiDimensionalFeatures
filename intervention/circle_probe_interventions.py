@@ -145,7 +145,7 @@ if day_month_choice == "day":
 elif day_month_choice == "month":
     task = MonthsOfYearTask(device, model_name=model_name)
 else:
-    task = load_task_class(day_month_choice)
+    task = load_task_class(day_month_choice)(device, model_name=model_name)
 
 # %%
 
