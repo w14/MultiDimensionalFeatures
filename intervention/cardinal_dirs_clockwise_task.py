@@ -15,15 +15,26 @@ device = "cuda:4"
 #
 # %%
 
+# cardinal_dirs = [
+#     "North",
+#     "Northeast",
+#     "East",
+#     "Southeast",
+#     "South",
+#     "Southwest",
+#     "West",
+#     "Northwest",
+# ]
+
 cardinal_dirs = [
     "North",
-    "Northeast",
+    "NE",
     "East",
-    "Southeast",
+    "SE",
     "South",
-    "Southwest",
+    "SW",
     "West",
-    "Northwest",
+    "NW",
 ]
 
 degrees_rotation = [ str(i * 45) + ' degrees' for i in range(9) ]
