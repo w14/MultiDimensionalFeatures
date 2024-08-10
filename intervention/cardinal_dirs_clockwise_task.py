@@ -153,14 +153,14 @@ class CardinalDirsClockwiseTask:
                 26: 'of',
                 27: '<Target heading>'
             }
-
             # self.b_token = 11 + (1 if model_name == "mistral" else 0)
             # self.a_token = 14 + (1 if model_name == "mistral" else 0)
             # self.before_c_token = 15 + (1 if model_name == "mistral" else 0)
-
             self.b_token = 13
             self.a_token = 9
             self.before_c_token = 26
+        
+        print('self.a_token', self.a_token)
 
         # (Friendly name, index into Problem.info)
         self.how_to_color = [
