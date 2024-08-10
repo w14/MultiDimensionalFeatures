@@ -130,6 +130,8 @@ if probe_on_centered_linear:
 # %%
 
 def load_task_class(task_name):
+    import importlib
+    
     module_name = f"{task_name.lower()}_task"
     class_name = ''.join(word.capitalize() for word in task_name.split('_')) + 'Task'
     try:
