@@ -78,25 +78,25 @@ class CardinalDirsClockwiseTask:
                 # 5: 'a'
                 # 6: 'heading'
                 # 7: 'of'
-                8: '<Start heading>'
-                9: '.'
-                10: 'It'
-                11: 'turns'
-                12: '<Num degrees rotation>'
-                13: 'degrees'
-                14: 'to'
-                15: 'the'
-                16: 'right'
-                17: '.'
-                18: 'It'
-                19: 'is'
-                20: 'now'
-                21: 'cruising'
-                22: 'with'
-                23: 'a'
-                24: 'heading'
-                25: 'of'
-                26: '<Target heading>'
+                8: '<Start heading>',
+                9: '.',
+                10: 'It',
+                11: 'turns',
+                12: '<Num degrees rotation>',
+                13: 'degrees',
+                14: 'to',
+                15: 'the',
+                16: 'right',
+                17: '.',
+                18: 'It',
+                19: 'is',
+                20: 'now',
+                21: 'cruising',
+                22: 'with',
+                23: 'a',
+                24: 'heading',
+                25: 'of',
+                26: '<Target heading>',
             }
             # self.token_map = ['A', 'boat', 'is', 'cruising', 'with', 'a', 'heading', 'of', '<Start heading>', '.', 'It', 'turns', '<Num degrees rotation>', 'degrees', 'to', 'the', 'right', '.', 'It', 'is', 'now', 'cruising', 'with', 'a', 'heading', 'of', '<Target heading>']
         else:
