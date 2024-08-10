@@ -15,44 +15,20 @@ device = "cuda:4"
 #
 # %%
 
-days_of_week = [
+cardinal_dirs = [
     "North",
-    "NE",
+    "Northeast",
     "East",
-    "SE",
-    "
+    "Southeast",
+    "South",
+    "Southwest",
+    "West",
+    "Northwest",
 ]
 
-day_intervals = [
-    "Zero hours",
-    "One hour",
-    "Two hours",
-    "Three hours",
-    "Four hours",
-    "Five hours",
-    "Six hours",
-    "Seven hours",
-    "Eight hours",
-    "Nine hours",
-    "Ten hours",
-    "Eleven hours",
-    "Twelve hours",
-    "Thirteen hours",
-    "Fourteen hours",
-    "Fifteen hours",
-    "Sixteen hours",
-    "Seventeen hours",
-    "Eighteen hours",
-    "Nineteen hours",
-    "Twenty hours",
-    "Twenty-one hours",
-    "Twenty-two hours",
-    "Twenty-three hours",
-    "Twenty-four hours"
-]
+degrees_rotation = [ str(i * 45) + ' degrees' for i in range(8) ]
 
-
-class DaysOfWeekTask:
+class CardinalDirsClockwiseTask:
     def __init__(self, device, model_name="mistral", n_devices=None):
         self.device = device
 
@@ -61,58 +37,89 @@ class DaysOfWeekTask:
         self.n_devices = n_devices
 
         # Tokens we expect as possible answers. Best of these can optionally be saved (as opposed to best logit overall)
-        self.allowable_tokens = days_of_week
+        self.allowable_tokens = cardinal_dirs
 
-        self.prefix = f"{BASE_DIR}{model_name}_days_of_week/"
+        self.prefix = f"{BASE_DIR}{model_name}_cardinal_dirs_clockwise/"
         if not os.path.exists(self.prefix):
             os.makedirs(self.prefix)
 
         self.num_tokens_in_answer = 1
 
-        self.prediction_names = ["day of week"]
+        self.prediction_names = ["heading"]
 
         # Leave tokens until difference commented out since we never want to plot them
         if model_name == "mistral":
+            # self.token_map = {
+            #     # 0: "<s>",
+            #     # 1: "Let",
+            #     # 2: "apostrophe",
+            #     # 3: "s after apostrophe",
+            #     # 4: "do",
+            #     # 5: "some",
+            #     # 6: "days (first)",
+            #     # 7: "of",
+            #     # 8: "the",
+            #     # 9: "week",
+            #     # 10: "math",
+            #     # 11: "<Period>",
+            #     12: "<Num duration days>",
+            #     13: "days (second)",
+            #     14: "from",
+            #     15: "<Start heading>",
+            #     16: "is",
+            #     17: "<Target heading>",
+            # }
             self.token_map = {
-                # 0: "<s>",
-                # 1: "Let",
-                # 2: "apostrophe",
-                # 3: "s after apostrophe",
-                # 4: "do",
-                # 5: "some",
-                # 6: "days (first)",
-                # 7: "of",
-                # 8: "the",
-                # 9: "week",
-                # 10: "math",
-                # 11: "<Period>",
-                12: "<Num duration days>",
-                13: "days (second)",
-                14: "from",
-                15: "<Start day of week>",
-                16: "is",
-                17: "<Target day of week>",
+                # 0: 'A'
+                # 1: 'boat'
+                # 2: 'is'
+                # 3: 'cruising'
+                # 4: 'with'
+                # 5: 'a'
+                # 6: 'heading'
+                # 7: 'of'
+                8: '<Start heading>'
+                9: '.'
+                10: 'It'
+                11: 'turns'
+                12: '<Num degrees rotation>'
+                13: 'degrees'
+                14: 'to'
+                15: 'the'
+                16: 'right'
+                17: '.'
+                18: 'It'
+                19: 'is'
+                20: 'now'
+                21: 'cruising'
+                22: 'with'
+                23: 'a'
+                24: 'heading'
+                25: 'of'
+                26: '<Target heading>'
             }
+            # self.token_map = ['A', 'boat', 'is', 'cruising', 'with', 'a', 'heading', 'of', '<Start heading>', '.', 'It', 'turns', '<Num degrees rotation>', 'degrees', 'to', 'the', 'right', '.', 'It', 'is', 'now', 'cruising', 'with', 'a', 'heading', 'of', '<Target heading>']
         else:
-            self.token_map = {
-                # 0: "<|begin_of_text|>",
-                # 1: "Let",
-                # 2: "apostrophe s",
-                # 3: "do",
-                # 4: "some",
-                # 5: "days",
-                # 6: "of",
-                # 7: "the",
-                # 8: "week",
-                # 9: "math",
-                # 10: "<Period>",
-                11: "<Num duration days>",
-                12: "days (second)",
-                13: "from",
-                14: "<Start day of week>",
-                15: "is",
-                16: "<Target day of week>",
-            }
+            # self.token_map = {
+            #     # 0: "<|begin_of_text|>",
+            #     # 1: "Let",
+            #     # 2: "apostrophe s",
+            #     # 3: "do",
+            #     # 4: "some",
+            #     # 5: "days",
+            #     # 6: "of",
+            #     # 7: "the",
+            #     # 8: "week",
+            #     # 9: "math",
+            #     # 10: "<Period>",
+            #     11: "<Num duration days>",
+            #     12: "days (second)",
+            #     13: "from",
+            #     14: "<Start heading>",
+            #     15: "is",
+            #     16: "<Target heading>",
+            # }
+            self.token_map = ['<|begin_of_text|>', 'A', 'boat', 'is', 'cruising', 'with', 'a', 'heading', 'of', '<Start heading>', '.', 'It', 'turns', '', '<Num degrees rotation>', 'degrees', 'to', 'the', 'right', '.', 'It', 'is', 'now', 'cruising', 'with', 'a', 'heading', 'of', '<Target heading>']
 
         self.b_token = 11 + (1 if model_name == "mistral" else 0)
         self.a_token = 14 + (1 if model_name == "mistral" else 0)
@@ -126,17 +133,18 @@ class DaysOfWeekTask:
         ]
 
         # Used for figures folder
-        self.name = f"{model_name}_days_of_week"
+        self.name = f"{model_name}_cardinal_dirs"
 
         self._lazy_model = None
 
-    def _get_prompt(self, starting_day_int, num_days_int):
-        starting_day_str = days_of_week[starting_day_int]
-        num_days_str = day_intervals[num_days_int]
-        prompt = f"Let's do some days of the week math. {num_days_str} from {starting_day_str} is"
+    def _get_prompt(self, starting_heading_int, degrees_rotation_int):
+        starting_heading_str = cardinal_dirs[starting_heading_int]
+        degrees_to_rotate = degrees_rotation[degrees_rotation_int]
+        # prompt = f"Let's do some days of the week math. {num_days_str} from {starting_day_str} is"
+        prompt = f"A boat is cruising with a heading of {starting_heading_str}. It turns {degrees_to_rotate} degrees to the right. It is now cruising with a heading of"
 
-        correct_answer_int = (starting_day_int + num_days_int) % 7
-        correct_answer_str = days_of_week[correct_answer_int]
+        correct_answer_int = (starting_heading_int + degrees_rotation_int) % 8
+        correct_answer_str = cardinal_dirs[correct_answer_int]
 
         # TODO: Should we distinguish between carrys and not in the correct answer?
         return prompt, correct_answer_str, correct_answer_int
@@ -144,10 +152,10 @@ class DaysOfWeekTask:
     def generate_problems(self):
         np.random.seed(42)
         problems = []
-        for starting_day in range(7):
-            for num_days in range(1, 8):
+        for starting_day in range(8):
+            for num_days in range(1, 9):
                 prompt, correct_answer_str, correct_answer_int = self._get_prompt(
-                    starting_day_int=starting_day, num_days_int=num_days
+                    starting_heading_int=starting_day, degrees_rotation_int=num_days
                 )
                 problems.append(
                     Problem(
@@ -188,8 +196,8 @@ class DaysOfWeekTask:
 # %%
 
 if __name__ == "__main__":
-    task = DaysOfWeekTask(device, model_name="llama")
-    # task = DaysOfWeekTask(device, model_name="mistral")
+    task = CardinalDirsClockwiseTask(device, model_name="llama")
+    # task = CardinalDirsClockwiseTask(device, model_name="mistral")
 
 
 # %%
