@@ -26,8 +26,7 @@ if not is_notebook():
     parser.add_argument(
         "problem_type",
         type=str,
-        choices=["day", "month"],
-        help='Choose "day" or "month"',
+        help='Choose "day", "month", or task name like "cardinal_dirs_clockwise"',
     )
     parser.add_argument(
         "intervene_on",
