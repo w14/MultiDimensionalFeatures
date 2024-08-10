@@ -251,6 +251,16 @@ def plot_intervention_on_circle_in_a(task, layer, pca_k, b):
 
 if __name__ == "__main__":
     import argparse
+    import importlib
+
+    def load_task_class(task_name):
+        module_name = f"{task_name.lower()}_task"
+        class_name = ''.join(word.capitalize() for word in task_name.split('_')) + 'Task'
+        try:
+            module = importlib.import_module(module_name)
+            return getattr(module, class_name)
+        except (ImportError, AttributeError):
+            raise ValueError(f"Could not import task class {class_name} from module {module_name}")
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--only_paper_plots", action="store_true")
@@ -258,20 +268,47 @@ if __name__ == "__main__":
         "--device", type=str, default="cuda:0" if torch.cuda.is_available() else "cpu"
     )
 
-    args = parser.parse_args()
+    subparsers = parser.add_subparsers(dest="command")
 
+    # Custom subcommand
+    custom_parser = subparsers.add_parser("custom")
+    custom_parser.add_argument("--task", type=str, required=True, help="Task name (e.g., 'days_of_week')")
+    custom_parser.add_argument("--model_name", type=str, default="mistral")
+    custom_parser.add_argument("--layer", type=int, help="Single layer to analyze")
+    custom_parser.add_argument("--layer-start", type=int, default=0, help="Start layer (inclusive)")
+    custom_parser.add_argument("--layer-end", type=int, default=8, help="End layer (inclusive)")
+    custom_parser.add_argument("--pca_k", type=int, default=5)
+    custom_parser.add_argument("--b-start", type=int, default=2)
+    custom_parser.add_argument("--b-end", type=int, default=6)
+
+    args = parser.parse_args()
     device = args.device
 
     if args.only_paper_plots:
-        task_level_granularity = "day"
         model_name = "mistral"
         task = DaysOfWeekTask(device, model_name=model_name)
-        layer = 5
+        layers = range(5, 6)  # Only layer 5 for paper plots
         bs = range(2, 6)
         pca_k = 5
-        for b in bs:
-            plot_intervention_on_circle_in_a(task, layer, pca_k, b)
+        for layer in layers:
+            for b in bs:
+                plot_intervention_on_circle_in_a(task, layer, pca_k, b)
 
+    elif args.command == "custom":
+        TaskClass = load_task_class(args.task)
+        task = TaskClass(device, model_name=args.model_name)
+        
+        # Determine the layer range
+        if args.layer is not None:
+            layers = range(args.layer, args.layer + 1)
+        else:
+            layers = range(args.layer_start, args.layer_end + 1)
+        
+        bs = range(args.b_start, args.b_end + 1)
+        for layer in layers:
+            for b in bs:
+                plot_intervention_on_circle_in_a(task, layer, args.pca_k, b)
+                
     else:
         for model_name in ["llama", "mistral"]:
             for task_level_granularity in ["day", "month"]:
