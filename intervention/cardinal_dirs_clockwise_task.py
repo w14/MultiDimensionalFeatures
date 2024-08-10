@@ -30,6 +30,8 @@ degrees_rotation = [ str(i * 45) + ' degrees' for i in range(8) ]
 
 class CardinalDirsClockwiseTask:
     def __init__(self, device, model_name="mistral", n_devices=None):
+        print('CardinalDirsClockwiseTask.__init__')
+
         self.device = device
 
         self.model_name = model_name
