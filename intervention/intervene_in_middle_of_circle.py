@@ -293,8 +293,8 @@ if __name__ == "__main__":
         for layer in layers:
             for b in bs:
                 plot_intervention_on_circle_in_a(task, layer, pca_k, b)
-
     elif args.command == "custom":
+        task_level_granularity = args.task
         TaskClass = load_task_class(args.task)
         task = TaskClass(device, model_name=args.model_name)
         
