@@ -98,6 +98,9 @@ class CardinalDirsClockwiseTask:
                 25: 'of',
                 26: '<Target heading>',
             }
+            self.b_token = 12
+            self.a_token = 8
+            self.before_c_token = 25
             # self.token_map = ['A', 'boat', 'is', 'cruising', 'with', 'a', 'heading', 'of', '<Start heading>', '.', 'It', 'turns', '<Num degrees rotation>', 'degrees', 'to', 'the', 'right', '.', 'It', 'is', 'now', 'cruising', 'with', 'a', 'heading', 'of', '<Target heading>']
         else:
             # self.token_map = {
@@ -119,11 +122,45 @@ class CardinalDirsClockwiseTask:
             #     15: "is",
             #     16: "<Target heading>",
             # }
-            self.token_map = ['<|begin_of_text|>', 'A', 'boat', 'is', 'cruising', 'with', 'a', 'heading', 'of', '<Start heading>', '.', 'It', 'turns', '', '<Num degrees rotation>', 'degrees', 'to', 'the', 'right', '.', 'It', 'is', 'now', 'cruising', 'with', 'a', 'heading', 'of', '<Target heading>']
+            # self.token_map = ['<|begin_of_text|>', 'A', 'boat', 'is', 'cruising', 'with', 'a', 'heading', 'of', '<Start heading>', '.', 'It', 'turns', '', '<Num degrees rotation>', 'degrees', 'to', 'the', 'right', '.', 'It', 'is', 'now', 'cruising', 'with', 'a', 'heading', 'of', '<Target heading>']
+            self.token_map = {
+                # 0: '<|begin_of_text|>',
+                # 1: 'A',
+                # 2: 'boat',
+                # 3: 'is',
+                # 4: 'cruising',
+                # 5: 'with',
+                # 6: 'a',
+                # 7: 'heading',
+                # 8: 'of',
+                9: '<Start heading>',
+                10: '.',
+                11: 'It',
+                12: 'turns',
+                13: '<Num degrees rotation>',
+                14: 'degrees',
+                15: 'to',
+                16: 'the',
+                17: 'right',
+                18: '.',
+                19: 'It',
+                20: 'is',
+                21: 'now',
+                22: 'cruising',
+                23: 'with',
+                24: 'a',
+                25: 'heading',
+                26: 'of',
+                27: '<Target heading>'
+            }
 
-        self.b_token = 11 + (1 if model_name == "mistral" else 0)
-        self.a_token = 14 + (1 if model_name == "mistral" else 0)
-        self.before_c_token = 15 + (1 if model_name == "mistral" else 0)
+            # self.b_token = 11 + (1 if model_name == "mistral" else 0)
+            # self.a_token = 14 + (1 if model_name == "mistral" else 0)
+            # self.before_c_token = 15 + (1 if model_name == "mistral" else 0)
+
+            self.b_token = 13
+            self.a_token = 9
+            self.before_c_token = 26
 
         # (Friendly name, index into Problem.info)
         self.how_to_color = [
