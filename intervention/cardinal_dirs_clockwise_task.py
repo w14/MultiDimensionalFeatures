@@ -26,7 +26,7 @@ cardinal_dirs = [
     "Northwest",
 ]
 
-degrees_rotation = [ str(i * 45) + ' degrees' for i in range(8) ]
+degrees_rotation = [ str(i * 45) + ' degrees' for i in range(9) ]
 
 class CardinalDirsClockwiseTask:
     def __init__(self, device, model_name="mistral", n_devices=None):
