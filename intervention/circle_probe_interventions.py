@@ -130,10 +130,21 @@ if probe_on_centered_linear:
 
 # %%
 
+def load_task_class(task_name):
+    module_name = f"{task_name.lower()}_task"
+    class_name = ''.join(word.capitalize() for word in task_name.split('_')) + 'Task'
+    try:
+        module = importlib.import_module(module_name)
+        return getattr(module, class_name)
+    except (ImportError, AttributeError):
+        raise ValueError(f"Could not import task class {class_name} from module {module_name}")
+
 if day_month_choice == "day":
     task = DaysOfWeekTask(device, model_name=model_name)
-else:
+elif day_month_choice == "month":
     task = MonthsOfYearTask(device, model_name=model_name)
+else:
+    task = load_task_class(day_month_choice)
 
 # %%
 
