@@ -218,6 +218,7 @@ def get_acts_pca(
     names_filter=lambda x: "resid_post" in x or "hook_embed" in x,
     save_file_prefix="",
     force_regenerate=False,
+    force_regenerate_acts=False,
 ):
     act_file_name = f"{task.prefix}pca/{save_file_prefix}/layer{layer}_token{token}_pca{pca_k}{'_normalize' if normalize_rms else ''}.pt"
     pca_pkl_file_name = f"{task.prefix}pca/{save_file_prefix}/layer{layer}_token{token}_pca{pca_k}{'_normalize' if normalize_rms else ''}.pkl"
@@ -231,6 +232,7 @@ def get_acts_pca(
             normalize_rms=normalize_rms,
             names_filter=names_filter,
             save_file_prefix=save_file_prefix,
+            force_regenerate = force_regenerate_acts,
         )
         pca_object = PCA(n_components=pca_k).fit(acts)
         pca_acts = pca_object.transform(acts)
