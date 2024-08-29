@@ -217,12 +217,13 @@ def get_acts_pca(
     normalize_rms=False,
     names_filter=lambda x: "resid_post" in x or "hook_embed" in x,
     save_file_prefix="",
+    force_regenerate=False,
 ):
     act_file_name = f"{task.prefix}pca/{save_file_prefix}/layer{layer}_token{token}_pca{pca_k}{'_normalize' if normalize_rms else ''}.pt"
     pca_pkl_file_name = f"{task.prefix}pca/{save_file_prefix}/layer{layer}_token{token}_pca{pca_k}{'_normalize' if normalize_rms else ''}.pkl"
     os.makedirs(f"{task.prefix}/pca/{save_file_prefix}", exist_ok=True)
 
-    if not os.path.exists(act_file_name) or not os.path.exists(pca_pkl_file_name):
+    if not os.path.exists(act_file_name) or not os.path.exists(pca_pkl_file_name) or force_regenerate:
         acts = get_acts(
             task,
             layer,
