@@ -159,7 +159,7 @@ class MonthsOfYearTask:
 
     def get_model(self):
         if self.n_devices is None:
-            self.n_devices = 2 if "llama" == self.model_name else 1
+            self.n_devices = 1 if "llama" == self.model_name else 1
         if self._lazy_model is None:
             if self.model_name == "mistral":
                 self._lazy_model = transformer_lens.HookedTransformer.from_pretrained(

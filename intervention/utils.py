@@ -5,7 +5,6 @@ BASE_DIR = "/workspace/data/scratch/jae/"
 
 os.environ["TRANSFORMERS_CACHE"] = f"{BASE_DIR}/.cache/"
 
-
 def setup_notebook():
     try:
         from IPython import get_ipython
