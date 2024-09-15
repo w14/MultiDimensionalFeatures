@@ -5,6 +5,7 @@ from task import get_acts_pca, get_acts
 
 from days_of_week_task import DaysOfWeekTask
 from months_of_year_task import MonthsOfYearTask
+from cardinal_dirs_clockwise_task import CardinalDirsClockwiseTask
 import numpy as np
 import torch
 import matplotlib.pyplot as plt
@@ -288,6 +289,15 @@ if __name__ == "__main__":
         model_name = "mistral"
         task = DaysOfWeekTask(device, model_name=model_name)
         layers = range(5, 6)  # Only layer 5 for paper plots
+        bs = range(1, 9)
+        pca_k = 5
+        for layer in layers:
+            for b in bs:
+                plot_intervention_on_circle_in_a(task, layer, pca_k, b)
+    elif args.command == "debug":
+        model_name = "llama"
+        task = CardinalDirsClockwiseTask(device, model_name=model_name)
+        layers = range(5, 6)  # Only layer 5 for paper plots
         bs = range(2, 6)
         pca_k = 5
         for layer in layers:
@@ -310,8 +320,9 @@ if __name__ == "__main__":
                 plot_intervention_on_circle_in_a(task, layer, args.pca_k, b)
                 
     else:
-        for model_name in ["llama", "mistral"]:
-            for task_level_granularity in ["day", "month"]:
+        # for model_name in ["llama", "mistral"]:
+        for model_name in ["llama"]:
+            for task_level_granularity in ["day", "month", "cardinal_dirs_clockwise" ]:
                 for layer in range(8):
                     if task_level_granularity == "day":
                         bs = range(1, 8)

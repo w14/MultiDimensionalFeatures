@@ -173,9 +173,9 @@ class CardinalDirsClockwiseTask:
 
         # (Friendly name, index into Problem.info)
         self.how_to_color = [
-            ("target_day", 2),
-            ("start_day", 0),
-            ("duration_days", 1),
+            ("target_rotation", 2),
+            ("start_rotation", 0),
+            ("duration_rotation", 1),
         ]
 
         # Used for figures folder
