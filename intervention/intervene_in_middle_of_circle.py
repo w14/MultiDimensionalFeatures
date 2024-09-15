@@ -265,6 +265,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--only_paper_plots", action="store_true")
+    parser.add_argument("--debug", action="store_true")
     parser.add_argument(
         "--device", type=str, default="cuda:0" if torch.cuda.is_available() else "cpu"
     )
@@ -294,7 +295,7 @@ if __name__ == "__main__":
         for layer in layers:
             for b in bs:
                 plot_intervention_on_circle_in_a(task, layer, pca_k, b)
-    elif args.command == "debug":
+    elif args.debug:
         model_name = "llama"
         task = CardinalDirsClockwiseTask(device, model_name=model_name)
         layers = range(5, 6)  # Only layer 5 for paper plots
