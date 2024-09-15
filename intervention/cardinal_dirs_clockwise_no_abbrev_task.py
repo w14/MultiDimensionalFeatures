@@ -39,7 +39,7 @@ cardinal_dirs = [
 
 degrees_rotation = [ str(i * 45) + ' degrees' for i in range(9) ]
 
-class CardinalDirsClockwiseTask:
+class CardinalDirsClockwiseNoAbbrevTask:
     def __init__(self, device, model_name="mistral", n_devices=None):
         self.device = device
 
@@ -244,8 +244,8 @@ class CardinalDirsClockwiseTask:
 # %%
 
 if __name__ == "__main__":
-    task = CardinalDirsClockwiseTask(device, model_name="llama")
-    # task = CardinalDirsClockwiseTask(device, model_name="mistral")
+    task = CardinalDirsClockwiseNoAbbrevTask(device, model_name="llama")
+    # task = CardinalDirsClockwiseNoAbbrevTask(device, model_name="mistral")
 
 
 # %%

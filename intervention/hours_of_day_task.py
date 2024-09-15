@@ -15,7 +15,7 @@ device = "cuda:4"
 #
 # %%
 
-days_of_week = [
+hours_of_day = [
     "00:00",
     "01:00",
     "02:00",
@@ -42,32 +42,32 @@ days_of_week = [
     "23:00",
 ]
 
-day_intervals = [
-    "Zero hours",
-    "One hour",
-    "Two hours",
-    "Three hours",
-    "Four hours",
-    "Five hours",
-    "Six hours",
-    "Seven hours",
-    "Eight hours",
-    "Nine hours",
-    "Ten hours",
-    "Eleven hours",
-    "Twelve hours",
-    "Thirteen hours",
-    "Fourteen hours",
-    "Fifteen hours",
-    "Sixteen hours",
-    "Seventeen hours",
-    "Eighteen hours",
-    "Nineteen hours",
-    "Twenty hours",
-    "Twenty-one hours",
-    "Twenty-two hours",
-    "Twenty-three hours",
-    "Twenty-four hours"
+hour_intervals = [
+    "0 hours",
+    "1 hour",
+    "2 hours",
+    "3 hours",
+    "4 hours",
+    "5 hours",
+    "6 hours",
+    "7 hours",
+    "8 hours",
+    "9 hours",
+    "10 hours",
+    "11 hours",
+    "12 hours",
+    "13 hours",
+    "14 hours",
+    "15 hours",
+    "16 hours",
+    "17 hours",
+    "18 hours",
+    "19 hours",
+    "20 hours",
+    "21 hours",
+    "22 hours",
+    "23 hours",
+    "24 hours"
 ]
 
 
@@ -80,9 +80,9 @@ class DaysOfWeekTask:
         self.n_devices = n_devices
 
         # Tokens we expect as possible answers. Best of these can optionally be saved (as opposed to best logit overall)
-        self.allowable_tokens = days_of_week
+        self.allowable_tokens = hours_of_day
 
-        self.prefix = f"{BASE_DIR}{model_name}_days_of_week/"
+        self.prefix = f"{BASE_DIR}{model_name}_hours_of_day/"
         if not os.path.exists(self.prefix):
             os.makedirs(self.prefix)
 
@@ -113,49 +113,76 @@ class DaysOfWeekTask:
                 17: "<Target day of week>",
             }
         else:
+            # self.token_map = {
+            #     # 0: "<|begin_of_text|>",
+            #     # 1: "Let",
+            #     # 2: "apostrophe s",
+            #     # 3: "do",
+            #     # 4: "some",
+            #     # 5: "days",
+            #     # 6: "of",
+            #     # 7: "the",
+            #     # 8: "week",
+            #     # 9: "math",
+            #     # 10: "<Period>",
+            #     11: "<Num duration days>",
+            #     12: "days (second)",
+            #     13: "from",
+            #     14: "<Start day of week>",
+            #     15: "is",
+            #     16: "<Target day of week>",
+            # }
             self.token_map = {
-                # 0: "<|begin_of_text|>",
-                # 1: "Let",
-                # 2: "apostrophe s",
-                # 3: "do",
-                # 4: "some",
-                # 5: "days",
-                # 6: "of",
-                # 7: "the",
-                # 8: "week",
-                # 9: "math",
-                # 10: "<Period>",
-                11: "<Num duration days>",
-                12: "days (second)",
-                13: "from",
-                14: "<Start day of week>",
-                15: "is",
-                16: "<Target day of week>",
+                0: '<|begin_of_text|>',
+                1: 'Let',
+                2: "'s",
+                3: 'Ġdo',
+                4: 'Ġsome',
+                5: 'Ġclock',
+                6: 'Ġmath',
+                7: '.',
+                8: 'ĠRight',
+                9: 'Ġnow',
+                10: 'Ġit',
+                11: 'Ġis',
+                12: 'Ġ',
+                13: '<Start hour of day>',
+                14: ':',
+                15: '00',
+                16: '.',
+                17: 'ĠIn',
+                18: 'Ġ',
+                19: '<Num duration hours>',
+                20: 'Ġhours',
+                21: 'Ġit',
+                22: 'Ġwill',
+                23: 'Ġbe',
+                24: '<Target hour of day>',
             }
 
-        self.b_token = 11 + (1 if model_name == "mistral" else 0)
-        self.a_token = 14 + (1 if model_name == "mistral" else 0)
-        self.before_c_token = 15 + (1 if model_name == "mistral" else 0)
+        self.b_token = 19
+        self.a_token = 13
+        self.before_c_token = 23
 
         # (Friendly name, index into Problem.info)
         self.how_to_color = [
-            ("target_day", 2),
-            ("start_day", 0),
-            ("duration_days", 1),
+            ("target_hour", 2),
+            ("start_hour", 0),
+            ("duration_hours", 1),
         ]
 
         # Used for figures folder
-        self.name = f"{model_name}_days_of_week"
+        self.name = f"{model_name}_hours_of_day"
 
         self._lazy_model = None
 
-    def _get_prompt(self, starting_day_int, num_days_int):
-        starting_day_str = days_of_week[starting_day_int]
-        num_days_str = day_intervals[num_days_int]
-        prompt = f"Let's do some days of the week math. {num_days_str} from {starting_day_str} is"
+    def _get_prompt(self, starting_hour_int, num_hours_int):
+        starting_hour_str = hours_of_day[starting_hour_int]
+        num_hours_str = hour_intervals[num_hours_int]
+        prompt = f"Let's do some clock math. Right now it is {starting_hour_str}. In {num_hours_str} hours it will be"
 
-        correct_answer_int = (starting_day_int + num_days_int) % 7
-        correct_answer_str = days_of_week[correct_answer_int]
+        correct_answer_int = (starting_hour_int + num_hours_int) % 24
+        correct_answer_str = hours_of_day[correct_answer_int]
 
         # TODO: Should we distinguish between carrys and not in the correct answer?
         return prompt, correct_answer_str, correct_answer_int
@@ -163,10 +190,10 @@ class DaysOfWeekTask:
     def generate_problems(self):
         np.random.seed(42)
         problems = []
-        for starting_day in range(7):
-            for num_days in range(1, 8):
+        for starting_day in range(24):
+            for num_days in range(1, 25):
                 prompt, correct_answer_str, correct_answer_int = self._get_prompt(
-                    starting_day_int=starting_day, num_days_int=num_days
+                    starting_hour_int=starting_day, num_hours_int=num_days
                 )
                 problems.append(
                     Problem(
@@ -197,12 +224,10 @@ class DaysOfWeekTask:
         return self._lazy_model
 
     def important_tokens(self):
-        important_tokens = [12, 13, 14, 15, 16]
-        if self.model_name == "llama":
-            for i in range(len(important_tokens)):
-                important_tokens[i] -= 1
+        important_tokens = [13, 19, 23, 24]
+        if self.model_name != "llama":
+            raise Exception("Only llama supported!")
         return important_tokens
-
 
 # %%
 
