@@ -50,7 +50,7 @@ class CardinalDirsClockwiseNoAbbrevTask:
         # Tokens we expect as possible answers. Best of these can optionally be saved (as opposed to best logit overall)
         self.allowable_tokens = cardinal_dirs
 
-        self.prefix = f"{BASE_DIR}{model_name}_cardinal_dirs_clockwise/"
+        self.prefix = f"{BASE_DIR}{model_name}_cardinal_dirs_clockwise_no_abbrev/"
         if not os.path.exists(self.prefix):
             os.makedirs(self.prefix)
 

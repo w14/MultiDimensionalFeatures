@@ -324,7 +324,7 @@ if __name__ == "__main__":
     else:
         # for model_name in ["llama", "mistral"]:
         for model_name in ["llama"]:
-            for task_level_granularity in ["day", "month", "cardinal_dirs_clockwise" ]:
+            for task_level_granularity in ["day", "month", "cardinal_dirs_clockwise", "cardinal_dirs_clockwise_no_abbrev" ]:
                 for layer in range(8):
                     if task_level_granularity == "day":
                         bs = range(1, 8)
