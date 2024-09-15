@@ -299,7 +299,7 @@ if __name__ == "__main__":
         task_level_granularity = "cardinal_dirs_clockwise"
         model_name = "llama"
         task = CardinalDirsClockwiseTask(device, model_name=model_name)
-        layers = range(5, 6)  # Only layer 5 for paper plots
+        layers = range(1, 9)  # Only layer 5 for paper plots
         bs = range(2, 6)
         pca_k = 5
         for layer in layers:
