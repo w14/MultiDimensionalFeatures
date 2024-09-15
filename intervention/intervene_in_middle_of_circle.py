@@ -296,6 +296,7 @@ if __name__ == "__main__":
             for b in bs:
                 plot_intervention_on_circle_in_a(task, layer, pca_k, b)
     elif args.debug:
+        task_level_granularity = "cardinal_dirs_clockwise"
         model_name = "llama"
         task = CardinalDirsClockwiseTask(device, model_name=model_name)
         layers = range(5, 6)  # Only layer 5 for paper plots
