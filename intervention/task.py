@@ -73,7 +73,6 @@ def generate_and_save_acts(
                         else lambda x: "attn" in x
                     ),
                 )
-                print(activation_batch.keys())
 
                 max_logit = torch.argmax(logit_batch, dim=-1)[:, -1]
 
