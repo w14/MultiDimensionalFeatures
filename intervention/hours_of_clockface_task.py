@@ -31,18 +31,18 @@ hours_of_clockface = [
 ]
 
 hour_intervals = [
-    "zero hours",
-    "one hour",
-    "two hours",
-    "three hours",
-    "four hours",
-    "five hours",
-    "six hours",
-    "seven hours",
-    "eight hours",
-    "nine hours",
-    "ten hours",
-    "eleven hours",
+    "0 hours",
+    "1 hour",
+    "2 hours",
+    "3 hours",
+    "4 hours",
+    "5 hours",
+    "6 hours",
+    "7 hours",
+    "8 hours",
+    "9 hours",
+    "10 hours",
+    "11 hours",
 ]
 
 class HoursOfClockfaceTask:
@@ -88,35 +88,36 @@ class HoursOfClockfaceTask:
                 17: "<Target day of week>",
             }
         else:
-            self.token_map = {
-                # 0: "<|begin_of_text|>",
-                # 1: "Let",
-                # 2: "apostrophe s",
-                # 3: "do",
-                # 4: "some",
-                # 5: "days",
-                # 6: "of",
-                # 7: "the",
-                # 8: "week",
-                # 9: "math",
-                # 10: "<Period>",
-                11: "<Num duration days>",
-                12: "days (second)",
-                13: "from",
-                14: "<Start day of week>",
-                15: "is",
-                16: "<Target day of week>",
-            }
+            # self.token_map = {
+            #     # 0: "<|begin_of_text|>",
+            #     # 1: "Let",
+            #     # 2: "apostrophe s",
+            #     # 3: "do",
+            #     # 4: "some",
+            #     # 5: "days",
+            #     # 6: "of",
+            #     # 7: "the",
+            #     # 8: "week",
+            #     # 9: "math",
+            #     # 10: "<Period>",
+            #     11: "<Num duration days>",
+            #     12: "days (second)",
+            #     13: "from",
+            #     14: "<Start day of week>",
+            #     15: "is",
+            #     16: "<Target day of week>",
+            # }
+            self.token_map = { 0: '<|begin_of_text|>', 1: 'Let', 2: "'s", 3: 'Ġdo', 4: 'Ġsome', 5: 'Ġclock', 6: 'Ġmath', 7: '.', 8: 'ĠThe', 9: 'Ġhour', 10: 'Ġhand', 11: 'Ġis', 12: 'Ġpointing', 13: 'Ġto', 14: 'Ġthe', 15: 'Ġ', 16: '12', 17: '.', 18: 'ĠIn', 19: 'Ġ', 20: '7', 21: 'Ġhours', 22: ',', 23: 'Ġit', 24: 'Ġwill', 25: 'Ġbe', 26: 'Ġpointing', 27: 'Ġto', 28: 'Ġthe' }
 
-        self.b_token = 11 + (1 if model_name == "mistral" else 0)
-        self.a_token = 14 + (1 if model_name == "mistral" else 0)
-        self.before_c_token = 15 + (1 if model_name == "mistral" else 0)
+        self.b_token = 20
+        self.a_token = 16
+        self.before_c_token = 28
 
         # (Friendly name, index into Problem.info)
         self.how_to_color = [
-            ("target_day", 2),
-            ("start_day", 0),
-            ("duration_days", 1),
+            ("target_hour", 2),
+            ("start_hour", 0),
+            ("duration_hours", 1),
         ]
 
         # Used for figures folder
@@ -124,12 +125,13 @@ class HoursOfClockfaceTask:
 
         self._lazy_model = None
 
-    def _get_prompt(self, starting_day_int, num_days_int):
-        starting_day_str = hours_of_clockface[starting_day_int]
-        num_days_str = day_intervals[num_days_int]
-        prompt = f"Let's do some days of the week math. {num_days_str} from {starting_day_str} is"
+    def _get_prompt(self, starting_hour_int, num_hours_int):
+        starting_hour_str = hours_of_clockface[starting_hour_int]
+        num_hours_str = hour_intervals[num_hours_int]
+        # prompt = f"Let's do some hours of the week math. {num_hours_str} from {starting_hour_str} is"
+        prompt = f"Let's do some clock math. The hour hand is pointing to the {starting_hour_str}. In {num_hours_str} hours, it will be pointing to the"
 
-        correct_answer_int = (starting_day_int + num_days_int) % 7
+        correct_answer_int = (starting_hour_int + num_hours_int) % 12
         correct_answer_str = hours_of_clockface[correct_answer_int]
 
         # TODO: Should we distinguish between carrys and not in the correct answer?
@@ -138,19 +140,18 @@ class HoursOfClockfaceTask:
     def generate_problems(self):
         np.random.seed(42)
         problems = []
-        for starting_day in range(7):
-            for num_days in range(1, 8):
+        for starting_hour in range(12):
+            for num_hours in range(1, 12):
                 prompt, correct_answer_str, correct_answer_int = self._get_prompt(
-                    starting_day_int=starting_day, num_days_int=num_days
+                    starting_hour_int=starting_hour, num_hours_int=num_hours
                 )
                 problems.append(
                     Problem(
                         prompt,
                         correct_answer_str,
-                        (starting_day, num_days, correct_answer_int),
+                        (starting_hour, num_hours, correct_answer_int),
                     )
                 )
-
         np.random.shuffle(problems)
         return problems
 
@@ -172,7 +173,7 @@ class HoursOfClockfaceTask:
         return self._lazy_model
 
     def important_tokens(self):
-        important_tokens = [12, 13, 14, 15, 16]
+        important_tokens = [16, 20, 28]
         if self.model_name == "llama":
             for i in range(len(important_tokens)):
                 important_tokens[i] -= 1
