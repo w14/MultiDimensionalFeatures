@@ -108,8 +108,6 @@ def generate_and_save_acts(
                         best_logit = float("-inf")
                         best_token = None
                         for token in task.allowable_tokens:
-                            print('model', model)
-                            import pdb; pdb.set_trace()
                             logit = last_logits[model.to_single_token(token)]
                             if logit > best_logit:
                                 best_logit = logit
